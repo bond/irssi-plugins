@@ -54,8 +54,8 @@ sub inetmeta_request {
 				$duration = floor( $video->duration / 60 ) . "m" if ( $video->duration >= 60 );
 				$duration .= ( $video->duration % 60 ) . "s";
 				
-				$server->command("^NOTICE $target ($nick) Youtube: " . $video->title . " ($duration, " . $video->view_count . " views)");
-				$server->print($target, "$nick posted Youtube: " . $video->title . " ($duration, " . $video->view_count . " views)");
+				$server->command("^NOTICE $target ($nick) YouTube: " . $video->title . " ($duration, " . $video->view_count . " views)");
+				$server->print($target, "$nick posted YouTube: " . $video->title . " ($duration, " . $video->view_count . " views)");
 		}
 	}
 
