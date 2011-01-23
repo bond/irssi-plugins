@@ -32,9 +32,28 @@ sub public_inetmeta_request {
 	inetmeta_request($server,$msg,$nick,$target);
 }
 
+sub channel_is_target {
+    my $target = shift;
+    return 0 unless $target;
+
+    my $filter = Irssi::settings_get_str('inetmeta_channels');
+
+    # if no channels are set enable it on all
+    return 1 unless( $filter );
+    return 1 if ($filter =~ /^\s*$/);
+
+    foreach ( split(/\s*,\s*/, $filter) ) {
+	return 1 if( lc($target) eq lc($_) );
+    }
+    return 0;
+}
+
 sub inetmeta_request {
 	my($server,$msg,$nick,$target) = @_;
 
+	# /set inetmeta_channels #channel1, #channel2
+	return unless ( channel_is_target($target) );
+	    
 	# match URLs
 	if ( $msg =~ /\b(http:\/\/[^\s\b]+)\b/ ) {
 		my $u = new URI($1);
@@ -64,3 +83,4 @@ sub inetmeta_request {
 Irssi::signal_add('message public', 'public_inetmeta_request');
 Irssi::signal_add('message own_public', 'own_inetmeta_request');
 
+Irssi::settings_add_str('inetmeta', 'inetmeta_channels', "");
